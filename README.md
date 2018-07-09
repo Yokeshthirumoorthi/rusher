@@ -38,6 +38,13 @@ Provide data vizualization for benchmarks and performance metrics
 
 1. Yokesh Thirumoorthi - initial author - yokeshthirumoorthi@gmail.com
 
+#### Credits
+This application uses Open Source components. You can find the source code of their open source projects along with license information below. I acknowledge and am grateful to these developers for their contributions to open source.
+
+Project: Actix Chat example https://github.com/actix/actix/tree/master/examples/chat
+Copyright (c) 2017 Nikilay Kim (fafhrd91@gmail.com)
+License (MIT) https://github.com/actix/actix
+
 #### License
 
 This program is licensed under the "MIT License". Please see the file LICENSE in the source distribution of this software for license terms.
