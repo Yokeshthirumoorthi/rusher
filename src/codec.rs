@@ -4,9 +4,9 @@
 // distribution of this software for license terms.
 
 // CREDITS
-// Project: Actix Chat example https://github.com/actix/actix/tree/master/examples/chat
-// Copyright (c) 2017 Nikilay Kim (fafhrd91@gmail.com)
-// License (MIT) https://github.com/actix/actix
+// Project: https://github.com/actix/examples/tree/master/websocket-chat/
+// Copyright (c) 2017 Nikolay Kim (fafhrd91@gmail.com)
+// License (MIT) https://github.com/actix/actix-web/blob/master/LICENSE-MIT
 
 #![allow(dead_code)]
 use byteorder::{BigEndian, ByteOrder};

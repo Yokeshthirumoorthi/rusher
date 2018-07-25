@@ -4,16 +4,17 @@
 // distribution of this software for license terms.
 
 // CREDITS
-// Project: Actix Chat example https://github.com/actix/actix/tree/master/examples/chat
-// Copyright (c) 2017 Nikilay Kim (fafhrd91@gmail.com)
-// License (MIT) https://github.com/actix/actix
+// Project: https://github.com/actix/examples/tree/master/websocket-chat/
+// Copyright (c) 2017 Nikolay Kim (fafhrd91@gmail.com)
+// License (MIT) https://github.com/actix/actix-web/blob/master/LICENSE-MIT
 
 //! `ChatServer` is an actor. It maintains list of connection client session.
 //! And manages available rooms. Peers send messages to other peers in same
 //! room through `ChatServer`.
 
 use actix::prelude::*;
-use rand::{self, Rng};
+use rand::{self, Rng, ThreadRng};
+use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 
 use session;
@@ -21,15 +22,10 @@ use session;
 /// Message for chat server communications
 
 /// New chat session is created
+#[derive(Message)]
+#[rtype(usize)]
 pub struct Connect {
-    pub addr: Addr<session::ChatSession>,
-}
-
-/// Response type for Connect message
-///
-/// Chat server returns unique session id
-impl actix::Message for Connect {
-    type Result = usize;
+    pub addr: Recipient<Syn, session::Message>,
 }
 
 /// Session is disconnected
@@ -68,8 +64,9 @@ pub struct Join {
 /// `ChatServer` manages chat rooms and responsible for coordinating chat
 /// session. implementation is super primitive
 pub struct ChatServer {
-    sessions: HashMap<usize, Addr<session::ChatSession>>,
+    sessions: HashMap<usize, Recipient<Syn, session::Message>>,
     rooms: HashMap<String, HashSet<usize>>,
+    rng: RefCell<ThreadRng>,
 }
 
 impl Default for ChatServer {
@@ -79,8 +76,9 @@ impl Default for ChatServer {
         rooms.insert("Main".to_owned(), HashSet::new());
 
         ChatServer {
-            rooms,
             sessions: HashMap::new(),
+            rooms: rooms,
+            rng: RefCell::new(rand::thread_rng()),
         }
     }
 }
@@ -92,7 +90,7 @@ impl ChatServer {
             for id in sessions {
                 if *id != skip_id {
                     if let Some(addr) = self.sessions.get(id) {
-                        addr.do_send(session::Message(message.to_owned()))
+                        let _ = addr.do_send(session::Message(message.to_owned()));
                     }
                 }
             }
@@ -120,7 +118,7 @@ impl Handler<Connect> for ChatServer {
         self.send_message(&"Main".to_owned(), "Someone joined", 0);
 
         // register session with random id
-        let id = rand::thread_rng().gen::<usize>();
+        let id = self.rng.borrow_mut().gen::<usize>();
         self.sessions.insert(id, msg.addr);
 
         // auto join session to Main room

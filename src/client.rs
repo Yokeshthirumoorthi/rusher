@@ -4,9 +4,9 @@
 // distribution of this software for license terms.
 
 // CREDITS
-// Project: Actix Chat example https://github.com/actix/actix/tree/master/examples/chat
-// Copyright (c) 2017 Nikilay Kim (fafhrd91@gmail.com)
-// License (MIT) https://github.com/actix/actix
+// Project: https://github.com/actix/examples/tree/master/websocket-chat/
+// Copyright (c) 2017 Nikolay Kim (fafhrd91@gmail.com)
+// License (MIT) https://github.com/actix/actix-web/blob/master/LICENSE-MIT
 
 #[macro_use]
 extern crate actix;
@@ -15,62 +15,60 @@ extern crate bytes;
 extern crate futures;
 extern crate serde;
 extern crate serde_json;
-extern crate tokio;
-extern crate tokio_codec;
+extern crate tokio_core;
 extern crate tokio_io;
-extern crate tokio_tcp;
 #[macro_use]
 extern crate serde_derive;
 
+use actix::prelude::*;
+use futures::Future;
 use std::str::FromStr;
 use std::time::Duration;
 use std::{io, net, process, thread};
-
-use actix::prelude::*;
-use futures::Future;
-use tokio_codec::FramedRead;
+use tokio_core::net::TcpStream;
+use tokio_io::codec::FramedRead;
 use tokio_io::io::WriteHalf;
 use tokio_io::AsyncRead;
-use tokio_tcp::TcpStream;
 
 mod codec;
 
 fn main() {
+    let sys = actix::System::new("chat-client");
+
+    // Connect to server
+    let addr = net::SocketAddr::from_str("127.0.0.1:12345").unwrap();
+    Arbiter::handle().spawn(
+        TcpStream::connect(&addr, Arbiter::handle())
+            .and_then(|stream| {
+                let addr: Addr<Syn, _> = ChatClient::create(|ctx| {
+                    let (r, w) = stream.split();
+                    ChatClient::add_stream(FramedRead::new(r, codec::ClientChatCodec), ctx);
+                    ChatClient {
+                        framed: actix::io::FramedWrite::new(w, codec::ClientChatCodec, ctx),
+                    }
+                });
+
+                // start console loop
+                thread::spawn(move || loop {
+                    let mut cmd = String::new();
+                    if io::stdin().read_line(&mut cmd).is_err() {
+                        println!("error");
+                        return;
+                    }
+
+                    addr.do_send(ClientCommand(cmd));
+                });
+
+                futures::future::ok(())
+            })
+            .map_err(|e| {
+                println!("Can not connect to server: {}", e);
+                process::exit(1)
+            }),
+    );
+
     println!("Running chat client");
-
-    actix::System::run(|| {
-        // Connect to server
-        let addr = net::SocketAddr::from_str("127.0.0.1:12345").unwrap();
-        Arbiter::spawn(
-            TcpStream::connect(&addr)
-                .and_then(|stream| {
-                    let addr = ChatClient::create(|ctx| {
-                        let (r, w) = stream.split();
-                        ctx.add_stream(FramedRead::new(r, codec::ClientChatCodec));
-                        ChatClient {
-                            framed: actix::io::FramedWrite::new(w, codec::ClientChatCodec, ctx),
-                        }
-                    });
-
-                    // start console loop
-                    thread::spawn(move || loop {
-                        let mut cmd = String::new();
-                        if io::stdin().read_line(&mut cmd).is_err() {
-                            println!("error");
-                            return;
-                        }
-
-                        addr.do_send(ClientCommand(cmd));
-                    });
-
-                    futures::future::ok(())
-                })
-                .map_err(|e| {
-                    println!("Can not connect to server: {}", e);
-                    process::exit(1)
-                }),
-        );
-    });
+    sys.run();
 }
 
 struct ChatClient {
@@ -88,13 +86,11 @@ impl Actor for ChatClient {
         self.hb(ctx)
     }
 
-    fn stopping(&mut self, _: &mut Context<Self>) -> Running {
+    fn stopped(&mut self, _: &mut Context<Self>) {
         println!("Disconnected");
 
         // Stop application on disconnect
-        System::current().stop();
-
-        Running::Stop
+        Arbiter::system().do_send(actix::msgs::SystemExit(0));
     }
 }
 
@@ -115,6 +111,9 @@ impl Handler<ClientCommand> for ChatClient {
 
     fn handle(&mut self, msg: ClientCommand, _: &mut Context<Self>) {
         let m = msg.0.trim();
+        if m.is_empty() {
+            return;
+        }
 
         // we check for /sss type of messages
         if m.starts_with('/') {
@@ -139,6 +138,7 @@ impl Handler<ClientCommand> for ChatClient {
 }
 
 /// Server communication
+
 impl StreamHandler<codec::ChatResponse, io::Error> for ChatClient {
     fn handle(&mut self, msg: codec::ChatResponse, _: &mut Context<Self>) {
         match msg {
@@ -153,7 +153,7 @@ impl StreamHandler<codec::ChatResponse, io::Error> for ChatClient {
                 for room in rooms {
                     println!("{}", room);
                 }
-                println!();
+                println!("");
             }
             _ => (),
         }
