@@ -34,6 +34,7 @@ use actix_web::{fs, http, ws, App, Error, HttpRequest, HttpResponse};
 mod codec;
 mod server;
 mod session;
+use serde_json::Value;
 
 /// This is our websocket route state, this state is shared with all route
 /// instances via `HttpContext::state()`
@@ -174,7 +175,10 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                     let msg = if let Some(ref name) = self.name {
                         format!("{}: {}", name, m)
                     } else {
-                        m.to_owned()
+                        let msg_json_value: Value = serde_json::from_str(m).unwrap();
+                        // Access parts of the data by indexing with square brackets.
+                        msg_json_value["data"]["text"].as_str().unwrap().to_owned()
+                        // m.to_owned()
                     };
                     // send message to chat server
                     ctx.state().addr.do_send(server::Message {
