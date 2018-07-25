@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Chatwindow from './Chatwindow';
+import ChatWindow from './ChatWindow';
 import QuillEditor from './QuillEditor';
 
 class App extends Component {
@@ -16,7 +16,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <QuillEditor />
-        <Chatwindow />
+        <ChatWindow />
       </div>
     );
   }

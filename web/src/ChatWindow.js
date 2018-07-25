@@ -22,7 +22,7 @@ let messageHistory = [
     { type: 'emoji', author: "me", data: { emoji: "😋" } },
 ];
 
-class Chatwindow extends Component {
+class ChatWindow extends Component {
 
     constructor() {
         super();
@@ -64,4 +64,4 @@ class Chatwindow extends Component {
     }
 }
 
-export default Chatwindow;
+export default ChatWindow;
