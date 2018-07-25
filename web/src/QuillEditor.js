@@ -31,13 +31,27 @@ class QuillEditor extends Component {
         this.quillRef.insertText(position, 'Hello, World! ')
     }
 
+    setContents = () => {
+        this.quillRef.setContents([
+            { insert: 'Hello ' },
+            { insert: 'World!', attributes: { bold: true } },
+            { insert: '\n' }
+        ])
+    }
+
+    handleChange(value, delta) {
+        console.log(value, delta);
+    }
+
     render() {
         return (
             <div>
                 <ReactQuill
                     ref={(el) => { this.reactQuillRef = el }}
+                    onChange={this.handleChange}
                     theme={'snow'} />
                 <button onClick={this.insertText}>Insert Text</button>
+                <button onClick={this.setContents}>Update Delta</button>
             </div>
         )
     }
