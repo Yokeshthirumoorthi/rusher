@@ -177,7 +177,8 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                     } else {
                         let msg_json_value: Value = serde_json::from_str(m).unwrap();
                         // Access parts of the data by indexing with square brackets.
-                        msg_json_value["data"]["text"].as_str().unwrap().to_owned()
+                        // msg_json_value["data"]["text"].as_str().unwrap().to_owned()
+                        msg_json_value["ops"].to_string().to_owned()
                         // m.to_owned()
                     };
                     // send message to chat server

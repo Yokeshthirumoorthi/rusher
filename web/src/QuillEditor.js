@@ -1,19 +1,41 @@
+// Copyright © 2018 Yokesh Thirumoorthi
+// [This program is licensed under the "MIT License"]
+// Please see the file LICENSE in the source
+// distribution of this software for license terms.
+
+// CREDITS
+// Project: https://github.com/zenoamaro/react-quill
+// Copyright (c) 2016, zenoamaro zenoamaro@gmail.com
+// License (MIT) https://github.com/zenoamaro/react-quill/blob/master/LICENSE
+
 /* 
- * Simple editor component that takes placeholder text as a prop 
+ * React based Quill editor component
  */
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import ReactQuill from 'react-quill'
+
+const WS_URL = "ws://localhost:8080/ws/";
 
 class QuillEditor extends Component {
     constructor(props) {
         super(props)
         this.quillRef = null;      // Quill instance
         this.reactQuillRef = null; // ReactQuill component
+        this.state = {
+            editorContent: []
+        };
     }
 
     componentDidMount() {
-        this.attachQuillRefs()
+        this.attachQuillRefs();
+        // new websocket connection
+        this.connection = new WebSocket(WS_URL);
+        // listen to onmessage event
+        this.connection.onmessage = evt => {
+            console.log("On Message Quill", evt);
+            this.setContents(evt.data)
+        };
     }
 
     componentDidUpdate() {
@@ -25,22 +47,32 @@ class QuillEditor extends Component {
         this.quillRef = this.reactQuillRef.getEditor();
     }
 
-    insertText = () => {
-        var range = this.quillRef.getSelection();
-        let position = range ? range.index : 0;
-        this.quillRef.insertText(position, 'Hello, World! ')
+    /**
+     * Handles data from websocket
+     * 
+     * @param {Delta} content from peer editor with delta  
+     */
+    setContents(content) {
+        // TODO: handle this string check in generic way
+        if (content !== "Someone joined" && content !== "Someone disconnected") {
+            this.setState({
+                editorContent: JSON.parse(content)
+            })
+        };
     }
 
-    setContents = () => {
-        this.quillRef.setContents([
-            { insert: 'Hello ' },
-            { insert: 'World!', attributes: { bold: true } },
-            { insert: '\n' }
-        ])
-    }
-
-    handleChange(value, delta) {
-        console.log(value, delta);
+    /**
+     * Callback function that triggers on editor content change
+     * 
+     * @param {*} value 
+     * @param {*} delta 
+     * @param {*} source 
+     * @param {*} editor 
+     */
+    handleChange(value, delta, source, editor) {
+        if (this.connection) {
+            this.connection.send(JSON.stringify(editor.getContents()));
+        }
     }
 
     render() {
@@ -48,10 +80,10 @@ class QuillEditor extends Component {
             <div>
                 <ReactQuill
                     ref={(el) => { this.reactQuillRef = el }}
-                    onChange={this.handleChange}
+                    onChange={this.handleChange.bind(this)}
+                    value={this.state.editorContent}
+                    placeholder={'Write some text...'}
                     theme={'snow'} />
-                <button onClick={this.insertText}>Insert Text</button>
-                <button onClick={this.setContents}>Update Delta</button>
             </div>
         )
     }

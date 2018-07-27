@@ -50,12 +50,12 @@ class ChatWindow extends Component {
 
     componentDidMount() {
         // new websocket connection
-        this.connection = new WebSocket(WS_URL);
+        // this.connection = new WebSocket(WS_URL);
         // listen to onmessage event
-        this.connection.onmessage = evt => {
-            console.log("On Message", evt);
-            this._sendMessage(evt.data.toString())
-        };
+        // this.connection.onmessage = evt => {
+        //     console.log("On Message", evt);
+        //     this._sendMessage(evt.data.toString())
+        // };
     }
 
     /**
