@@ -112,17 +112,17 @@ impl Handler<session::Message> for WsChatSession {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 struct ChatMessageParams {
     text: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 struct EditorContentParams {
     insert: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(untagged)]
 enum MessageJson {
     ChatMessage {
@@ -132,8 +132,7 @@ enum MessageJson {
         data: ChatMessageParams,
     },
     EditorContent {
-        // ops: Vec<EditorContentParams>,
-        ops: String,
+        ops: Vec<EditorContentParams>,
     },
 }
 
@@ -202,10 +201,11 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                     } else {
                         let p: MessageJson = serde_json::from_str(m).unwrap();
 
-                        // TODO: handle EditorContent
                         match p {
                             MessageJson::ChatMessage { author, ty, data } => data.text,
-                            MessageJson::EditorContent { ops } => "".to_string().to_owned(),
+                            MessageJson::EditorContent { ops } => {
+                                serde_json::to_string(&ops).unwrap()
+                            }
                         }
                     };
                     // send message to chat server
