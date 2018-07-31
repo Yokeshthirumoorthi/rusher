@@ -112,6 +112,31 @@ impl Handler<session::Message> for WsChatSession {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatMessageParams {
+    text: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct EditorContentParams {
+    insert: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
+enum MessageJson {
+    ChatMessage {
+        author: String,
+        #[serde(rename = "type")]
+        ty: String,
+        data: ChatMessageParams,
+    },
+    EditorContent {
+        // ops: Vec<EditorContentParams>,
+        ops: String,
+    },
+}
+
 /// WebSocket message handler
 impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
     fn handle(&mut self, msg: ws::Message, ctx: &mut Self::Context) {
@@ -175,11 +200,13 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                     let msg = if let Some(ref name) = self.name {
                         format!("{}: {}", name, m)
                     } else {
-                        let msg_json_value: Value = serde_json::from_str(m).unwrap();
-                        // Access parts of the data by indexing with square brackets.
-                        // msg_json_value["data"]["text"].as_str().unwrap().to_owned()
-                        msg_json_value["ops"].to_string().to_owned()
-                        // m.to_owned()
+                        let p: MessageJson = serde_json::from_str(m).unwrap();
+
+                        // TODO: handle EditorContent
+                        match p {
+                            MessageJson::ChatMessage { author, ty, data } => data.text,
+                            MessageJson::EditorContent { ops } => "".to_string().to_owned(),
+                        }
                     };
                     // send message to chat server
                     ctx.state().addr.do_send(server::Message {

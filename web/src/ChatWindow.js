@@ -50,12 +50,12 @@ class ChatWindow extends Component {
 
     componentDidMount() {
         // new websocket connection
-        // this.connection = new WebSocket(WS_URL);
+        this.connection = new WebSocket(WS_URL);
         // listen to onmessage event
-        // this.connection.onmessage = evt => {
-        //     console.log("On Message", evt);
-        //     this._sendMessage(evt.data.toString())
-        // };
+        this.connection.onmessage = evt => {
+            console.log("On Message", evt);
+            this._sendMessage(evt.data.toString())
+        };
     }
 
     /**
@@ -85,6 +85,16 @@ class ChatWindow extends Component {
                 }]
             })
         }
+    }
+    _sendMessage_json(content) {
+        // TODO: handle this string check in generic way
+        if (content !== "Someone joined" && content !== "Someone disconnected") {
+            let json_content = JSON.parse(content);
+            console.log("json_content", json_content);
+            // this.setState({
+            //     editorContent: JSON.parse(content)
+            // })
+        };
     }
 
     render() {
