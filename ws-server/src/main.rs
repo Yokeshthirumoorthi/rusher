@@ -36,6 +36,17 @@ mod server;
 mod session;
 use serde_json::Value;
 
+#[macro_use]
+extern crate diesel;
+extern crate dotenv;
+extern crate uuid;
+
+mod db;
+mod models;
+mod schema;
+
+use db::*;
+
 /// This is our websocket route state, this state is shared with all route
 /// instances via `HttpContext::state()`
 struct WsChatSessionState {
@@ -200,9 +211,12 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                         format!("{}: {}", name, m)
                     } else {
                         let p: MessageJson = serde_json::from_str(m).unwrap();
-
+                        let connection = establish_connection();
                         match p {
-                            MessageJson::ChatMessage { author, ty, data } => data.text,
+                            MessageJson::ChatMessage { author, ty, data } => {
+                                let _ = create_chat(&connection, &data.text.as_str());
+                                data.text
+                            }
                             MessageJson::EditorContent { ops } => {
                                 serde_json::to_string(&ops).unwrap()
                             }
