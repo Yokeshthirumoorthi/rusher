@@ -30,12 +30,12 @@ class QuillEditor extends Component {
     componentDidMount() {
         this.attachQuillRefs();
         // new websocket connection
-        this.connection = new WebSocket(WS_URL);
+        // this.connection = new WebSocket(WS_URL);
         // listen to onmessage event
-        this.connection.onmessage = evt => {
-            console.log("On Message Quill", evt);
-            this.setContents(evt.data)
-        };
+        // this.connection.onmessage = evt => {
+        //     console.log("On Message Quill", evt);
+        //     this.setContents(evt.data)
+        // };
     }
 
     componentDidUpdate() {
