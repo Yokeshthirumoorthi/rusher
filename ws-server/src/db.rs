@@ -1,3 +1,5 @@
+//! Functions to interact with database
+
 use diesel;
 use diesel::prelude::*;
 use dotenv::dotenv;
@@ -5,6 +7,8 @@ use dotenv::dotenv;
 use models;
 use std::env;
 use uuid;
+
+/// Establishes new connection to sqlite database
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
@@ -13,6 +17,7 @@ pub fn establish_connection() -> SqliteConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
+/// Saves chat data in sqlite database
 pub fn create_chat(conn: &SqliteConnection, content: &str) -> usize {
     use schema::chats;
 

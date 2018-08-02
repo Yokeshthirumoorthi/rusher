@@ -1,3 +1,5 @@
+//! Models represents database tables as objects.
+
 use super::schema::chats;
 
 #[derive(Queryable)]
