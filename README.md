@@ -41,9 +41,16 @@ Provide data vizualization for benchmarks and performance metrics
 #### Credits
 This application uses Open Source components. You can find the source code of their open source projects along with license information below. I acknowledge and am grateful to these developers for their contributions to open source.
 
-Project: Actix Chat example https://github.com/actix/actix/tree/master/examples/chat
-Copyright (c) 2017 Nikilay Kim (fafhrd91@gmail.com)
-License (MIT) https://github.com/actix/actix
+Project: https://github.com/actix/examples/tree/master/websocket-chat/
+Copyright (c) 2017 Nikolay Kim (fafhrd91@gmail.com)
+License (MIT) https://github.com/actix/actix-web/blob/master/LICENSE-MIT
+
+Project: https://github.com/dharness/react-chat-window
+Author dylan@kingofthestack.com
+
+Project: https://github.com/zenoamaro/react-quill
+Copyright (c) 2016, zenoamaro zenoamaro@gmail.com
+License (MIT) https://github.com/zenoamaro/react-quill/blob/master/LICENSE
 
 #### License
 
