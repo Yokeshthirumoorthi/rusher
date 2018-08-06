@@ -15,9 +15,10 @@ extern crate env_logger;
 extern crate futures;
 extern crate rand;
 extern crate serde;
-extern crate serde_json;
 extern crate tokio_core;
 extern crate tokio_io;
+#[macro_use]
+extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
 
@@ -215,10 +216,20 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                         match p {
                             MessageJson::ChatMessage { author, ty, data } => {
                                 let _ = create_chat(&connection, &data.text.as_str());
-                                data.text
+                                let data = json!({
+                                    "source": "chat",
+                                    "payload": data.text
+                                    });
+                                serde_json::to_string(&data).unwrap()
+                                // data.text
                             }
                             MessageJson::EditorContent { ops } => {
-                                serde_json::to_string(&ops).unwrap()
+                                let data = json!({
+                                    "source": "editor",
+                                    "payload": ops
+                                    });
+                                serde_json::to_string(&data).unwrap()
+                                // serde_json::to_string(&ops).unwrap()
                             }
                         }
                     };

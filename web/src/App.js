@@ -28,12 +28,11 @@ class App extends Component {
   }
 
   handleReceivedMessage(evt) {
-    console.log("WS Event Received", evt);
     let data = evt.data;
-    if (data !== "Someone joined" && data !== "Someone disconnected") {
-      // this.setEditorContents(data)
-      this.appendChatMessage(data)
-    };
+    if (data === "Someone joined" || data === "Someone disconnected") return;
+    let { source, payload } = JSON.parse(data)
+    if (source === "editor") this.setEditorContents(payload);
+    if (source === "chat") this.appendChatMessage(payload);
   }
 
   /**
@@ -42,9 +41,7 @@ class App extends Component {
    * @param {Delta} content from peer editor with delta  
    */
   setEditorContents(content) {
-    this.setState({
-      editorContent: JSON.parse(content)
-    });
+    this.setState({ editorContent: content });
   }
 
   /**
