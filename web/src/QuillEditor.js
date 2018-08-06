@@ -44,7 +44,7 @@ class QuillEditor extends Component {
      * @param {*} editor 
      */
     handleChange(value, delta, source, editor) {
-        this.props.sendMessage(JSON.stringify(editor.getContents()));
+        this.props.sendMessage(editor.getContents());
     }
 
     render() {
