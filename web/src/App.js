@@ -8,8 +8,22 @@ import logo from './logo.svg';
 import './App.css';
 import ChatWindow from './ChatWindow';
 import QuillEditor from './QuillEditor';
+import WSServices from './WSServices';
 
 class App extends Component {
+
+  componentDidMount() {
+    WSServices.init(this.handleReceivedMessage);
+  }
+
+  handleReceivedMessage(evt) {
+    console.log("WS Event Received", evt);
+  }
+
+  sendMessage(message) {
+    WSServices.sendMessage(message);
+  }
+
   render() {
     return (
       <div className="App">
@@ -20,8 +34,8 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <QuillEditor />
-        <ChatWindow />
+        <QuillEditor sendMessage={this.sendMessage} />
+        <ChatWindow sendMessage={this.sendMessage} />
       </div>
     );
   }

@@ -29,13 +29,6 @@ class QuillEditor extends Component {
 
     componentDidMount() {
         this.attachQuillRefs();
-        // new websocket connection
-        // this.connection = new WebSocket(WS_URL);
-        // listen to onmessage event
-        // this.connection.onmessage = evt => {
-        //     console.log("On Message Quill", evt);
-        //     this.setContents(evt.data)
-        // };
     }
 
     componentDidUpdate() {
@@ -70,9 +63,7 @@ class QuillEditor extends Component {
      * @param {*} editor 
      */
     handleChange(value, delta, source, editor) {
-        if (this.connection) {
-            this.connection.send(JSON.stringify(editor.getContents()));
-        }
+        this.props.sendMessage(JSON.stringify(editor.getContents()));
     }
 
     render() {
