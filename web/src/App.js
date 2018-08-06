@@ -11,6 +11,15 @@ import QuillEditor from './QuillEditor';
 import WSServices from './WSServices';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      editorContent: [],
+      chatMessages: []
+    };
+    this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
+    this.setEditorContents = this.setEditorContents.bind(this);
+  }
 
   componentDidMount() {
     WSServices.init(this.handleReceivedMessage);
@@ -18,6 +27,21 @@ class App extends Component {
 
   handleReceivedMessage(evt) {
     console.log("WS Event Received", evt);
+    let data = evt.data;
+    if (data !== "Someone joined" && data !== "Someone disconnected") {
+      this.setEditorContents(data)
+    };
+  }
+
+  /**
+   * Handles data from websocket
+   * 
+   * @param {Delta} content from peer editor with delta  
+   */
+  setEditorContents(content) {
+    this.setState({
+      editorContent: JSON.parse(content)
+    });
   }
 
   sendMessage(message) {
@@ -34,7 +58,7 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <QuillEditor sendMessage={this.sendMessage} />
+        <QuillEditor sendMessage={this.sendMessage} data={this.state.editorContent} />
         <ChatWindow sendMessage={this.sendMessage} />
       </div>
     );

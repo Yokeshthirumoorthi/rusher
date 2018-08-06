@@ -15,16 +15,11 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import ReactQuill from 'react-quill'
 
-const WS_URL = "ws://localhost:8080/ws/";
-
 class QuillEditor extends Component {
     constructor(props) {
         super(props)
         this.quillRef = null;      // Quill instance
         this.reactQuillRef = null; // ReactQuill component
-        this.state = {
-            editorContent: []
-        };
     }
 
     componentDidMount() {
@@ -38,20 +33,6 @@ class QuillEditor extends Component {
     attachQuillRefs = () => {
         if (typeof this.reactQuillRef.getEditor !== 'function') return;
         this.quillRef = this.reactQuillRef.getEditor();
-    }
-
-    /**
-     * Handles data from websocket
-     * 
-     * @param {Delta} content from peer editor with delta  
-     */
-    setContents(content) {
-        // TODO: handle this string check in generic way
-        if (content !== "Someone joined" && content !== "Someone disconnected") {
-            this.setState({
-                editorContent: JSON.parse(content)
-            })
-        };
     }
 
     /**
@@ -72,7 +53,7 @@ class QuillEditor extends Component {
                 <ReactQuill
                     ref={(el) => { this.reactQuillRef = el }}
                     onChange={this.handleChange.bind(this)}
-                    value={this.state.editorContent}
+                    value={this.props.data}
                     placeholder={'Write some text...'}
                     theme={'snow'} />
             </div>
