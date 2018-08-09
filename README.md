@@ -31,17 +31,29 @@ This project uses the following stack,
 
 #### Build Instructions
 
-    To install Rust, run the following in your terminal
+To install Rust, run the following in your terminal
 
-    ```bash
-    curl https://sh.rustup.rs -sSf | sh
-    ```
-    or follow the installation instruction from https://www.rust-lang.org/en-US/install.html.
+```bash
+curl https://sh.rustup.rs -sSf | sh
+```
+or follow the installation instruction from https://www.rust-lang.org/en-US/install.html.
 
-    To install SQLite, follwing the instruction in this page http://www.sqlitetutorial.net/download-install-sqlite/
+To install SQLite, follwing the instruction in this page http://www.sqlitetutorial.net/download-install-sqlite/
 
-    You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
+You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
 
+# if sqlite is not install already use the below command
+```bash
+sudo apt-get install sqlite3 libsqlite3-dev
+```
+
+Need to install build essentials in ubuntu to configure diesel.
+
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install build-essential 
+```
 1. Setting up the project
 
     ```bash
