@@ -1,33 +1,41 @@
 #### Rusher
-This project provides a Rust-based highly-scalable websocket server (based on actor model) that provides following APIs
-
-1. Real time location tacking with geofence triggers
+Rusher is a high concurrency (using actor model) websocket server integrated with SQLite for data persistence.
+For now, this websocket provides the following api's
+1. Chat
 2. Colloborative text editing
-3. Chat
+3. geofence (typically used for real time location tacking in mobile apps)
 
-The clients consuming these api are implemented using javascript (using React and if possible with React-native).
+An example client, consuming these api's, is available in the web folder of this project.
+It is a React JS web application (in future will add an react-native app too) 
 
-The project is planned to be stretched by
-1. Benchmarking this websocket server for very high concurrent connections
-    1. Inspired to acheive something like erlang-phoenix 2 million websocket connection. (Ref: http://phoenixframework.org/blog/the-road-to-2-million-websocket-connections).
-2. Provide client side performance comparision between firebase vs Rust websocket connection.
-3. Benchmarking performance for read and write latency with various DB such as 
-    1. Using PostGIS instead of Geofire
-    2. Comparing SQLite / Rust-Redis / Postgres in use for this websocket server
-3. Implementing more APIs like
+#### Goals
+The objectives of this project are 
+1. Provide a RUST websocket server with capability to persist data.
+2. Proivde JSON based message format for server/client communication. 
+3. Provide some apis similar to that as in pusher.com
+4. Show that RUST websocket server could handle as much simultaneous connenction as Erlang Phoenix based websocket server can do. 
+ 
+Note: Rusher websocket is written using RUST - a fast, safe and efficient  programming language to develope
+highly concurrent and parallel programs. So I believe to acheive something like this blog - [erlang-phoenix 2 million websocket connection.]( http://phoenixframework.org/blog/the-road-to-2-million-websocket-connections).
+
+#### Future Works
+1. Provide more apis such as
     1. Activity feeds within friend networks
     2. Realtime bets and
     3. Realtime trading
+2. An example client consuming these apis using react-native app    
+3. Provide more options for data persistence and benchmark each of them
+    1. Using PostGIS for location based services
+    2. Comparing SQLite / Rust-Redis / Postgres in use for this websocket server
+4. Provide data vizualization for benchmarks and performance metrics like [this](https://www.techempower.com/benchmarks/#section=test&runid=fd07b64e-47ce-411e-8b9b-b13368e988c6)    
 
 #### Software Stack
 
 This project uses the following stack,
 1. Rust programming
 2. Actix-web for actor model based websocket server
-3. SQLite for data persistence
-4. React for chat UI
-5. Quill Js for text editor
-6. Rust with Firebase/Geofire for geofencing
+3. Diesel framework SQLite for data persistence
+4. React JS
 
 #### Build Instructions
 
@@ -36,13 +44,14 @@ To install Rust, run the following in your terminal
 ```bash
 curl https://sh.rustup.rs -sSf | sh
 ```
-or follow the installation instruction from https://www.rust-lang.org/en-US/install.html.
+or follow [this official installation instruction]( https://www.rust-lang.org/en-US/install.html).
 
 To install SQLite, follwing the instruction in this page http://www.sqlitetutorial.net/download-install-sqlite/
 
 You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
 
-# if sqlite is not install already use the below command
+If sqlite is not install already use the below command
+
 ```bash
 sudo apt-get install sqlite3 libsqlite3-dev
 ```
@@ -102,10 +111,6 @@ sudo apt-get install build-essential
     It Builds the app to the build folder and it correctly bundles React in production mode and optimizes the build for the best performance.
     
 
-#### Nice to have
-
-Provide data vizualization for benchmarks and performance metrics
-
 #### Authur
 
 1. Yokesh Thirumoorthi - initial author - yokeshthirumoorthi@gmail.com
@@ -113,6 +118,7 @@ Provide data vizualization for benchmarks and performance metrics
 #### Credits
 This application uses Open Source components. You can find the source code of their open source projects along with license information below. I acknowledge and am grateful to these developers for their contributions to open source.
 
+```
 Project: https://github.com/actix/examples/tree/master/websocket-chat/
 Copyright (c) 2017 Nikolay Kim (fafhrd91@gmail.com)
 License (MIT) https://github.com/actix/actix-web/blob/master/LICENSE-MIT
@@ -131,7 +137,7 @@ License (MIT) https://github.com/facebook/create-react-app/blob/next/LICENSE
 Project: https://github.com/diesel-rs/diesel
 Copyright (c) 2015-2018 Sean Griffin
 License (MIT) https://github.com/diesel-rs/diesel/blob/master/LICENSE-MIT
-
+```
 
 #### License
 
