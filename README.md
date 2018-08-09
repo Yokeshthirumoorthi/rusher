@@ -115,6 +115,10 @@ sudo apt-get install build-essential
 
 1. Yokesh Thirumoorthi - initial author - yokeshthirumoorthi@gmail.com
 
+## Sending Feedback
+
+We are always open to [your feedback](https://github.com/Yokeshthirumoorthi/rusher/issues).
+
 #### Credits
 This application uses Open Source components. You can find the source code of their open source projects along with license information below. I acknowledge and am grateful to these developers for their contributions to open source.
 
