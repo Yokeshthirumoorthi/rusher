@@ -260,7 +260,7 @@ fn main() {
     // Start tcp server in separate thread
     let srv = server.clone();
     Arbiter::new("tcp-server").do_send::<msgs::Execute>(msgs::Execute::new(move || {
-        session::TcpServer::new("127.0.0.1:12345", srv);
+        session::TcpServer::new("0.0.0.0:12345", srv);
         Ok(())
     }));
 
@@ -282,10 +282,10 @@ fn main() {
                 .resource("/ws/", |r| r.route().f(chat_route))
                 // static resources
                 .handler("/static/", fs::StaticFiles::new("static/"))
-    }).bind("127.0.0.1:8080")
+    }).bind("0.0.0.0:8080")
         .unwrap()
         .start();
 
-    println!("Started http server: 127.0.0.1:8080");
+    println!("Started http server: 0.0.0.0:8080");
     let _ = sys.run();
 }
