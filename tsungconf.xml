@@ -21,8 +21,8 @@
 
   <sessions>
     <session name="websocket" probability="100" type="ts_websocket">
-      <request>
-        <websocket type="connect" path="/socket/websocket"></websocket>
+      <request subst="true">
+        <websocket type="connect" path="/ws/"></websocket>
       </request>
         
         <request>
