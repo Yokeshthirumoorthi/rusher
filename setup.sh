@@ -9,14 +9,13 @@ sysctl -w net.core.wmem_max=16384
 wget http://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 sudo dpkg -i erlang-solutions_1.0_all.deb
 yes | sudo apt-get update
-yes | sudo apt-get install elixir esl-erlang build-essential git gnuplot libtemplate-perl
-wget http://tsung.erlang-projects.org/dist/tsung-1.6.0.tar.gz
-tar -xvf tsung-1.6.0.tar.gz
-cd tsung-1.6.0/
+yes | sudo apt-get install elixir esl-erlang build-essential git gnuplot libtemplate-perl autoconf
+git clone https://github.com/processone/tsung.git
+cd tsung/
 ./configure
 make
 sudo make install
 cd ..
-wget https://gist.githubusercontent.com/Gazler/53b842764f778fe57757/raw/9509c3d980f13bbb739f4ae117dc84ef1d721076/phoenix.xml
+git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
 echo "root soft nofile 4000000" >> /etc/security/limits.conf
 echo "root hard nofile 4000000" >> /etc/security/limits.conf
