@@ -2,7 +2,7 @@
 <!DOCTYPE tsung SYSTEM "/user/share/tsung/tsung-1.0.dtd">
 <tsung loglevel="debug" version="1.0">
   <clients>
-    <client host="localhost" use_controller_vm="true" maxusers="20000" />
+    <client host="tsungrust1" use_controller_vm="true" maxusers="64000" />
   </clients>
 
   <servers>
@@ -10,8 +10,8 @@
   </servers>
 
   <load>
-    <arrivalphase phase="1" duration="120" unit="second">
-      <users maxnumber="10000" arrivalrate="200" unit="second" />
+    <arrivalphase phase="1" duration="100" unit="second">
+      <users maxnumber="100000" arrivalrate="1000" unit="second" />
     </arrivalphase>
   </load>
 
@@ -29,11 +29,8 @@
             <websocket type="message" frame="text">{"author":"me","type":"text","data":{"text":"hi"}}</websocket>
         </request>
 
-      <for var="i" from="1" to="10" incr="1">
-        <thinktime value="10"/>
-        <request>
-          <websocket ack="no_ack" type="message" frame="text">{"author":"me","type":"text","data":{"text":"heartbeat"}}</websocket>
-        </request>
+      <for var="i" from="1" to="1000" incr="1">
+        <thinktime value="30"/>
       </for>
     </session>
   </sessions>
