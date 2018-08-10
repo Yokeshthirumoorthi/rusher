@@ -2,7 +2,8 @@
 <!DOCTYPE tsung SYSTEM "/user/share/tsung/tsung-1.0.dtd">
 <tsung loglevel="debug" version="1.0">
   <clients>
-    <client host="tsungrust1" use_controller_vm="true" maxusers="64000" />
+    <client host="tsungrust1" cpu="4" use_controller_vm="false" maxusers="64000" />
+    <client host="tsungrust3" cpu="4" use_controller_vm="false" maxusers="64000" />
   </clients>
 
   <servers>
