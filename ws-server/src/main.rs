@@ -151,7 +151,7 @@ enum MessageJson {
 /// WebSocket message handler
 impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
     fn handle(&mut self, msg: ws::Message, ctx: &mut Self::Context) {
-        println!("WEBSOCKET MESSAGE: {:?}", msg);
+        // println!("WEBSOCKET MESSAGE: {:?}", msg);
         match msg {
             ws::Message::Ping(msg) => ctx.pong(&msg),
             ws::Message::Pong(msg) => self.hb = Instant::now(),
@@ -211,27 +211,28 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
                     let msg = if let Some(ref name) = self.name {
                         format!("{}: {}", name, m)
                     } else {
-                        let p: MessageJson = serde_json::from_str(m).unwrap();
-                        let connection = establish_connection();
-                        match p {
-                            MessageJson::ChatMessage { author, ty, data } => {
-                                let _ = create_chat(&connection, &data.text.as_str());
-                                let data = json!({
-                                    "source": "chat",
-                                    "payload": data.text
-                                    });
-                                serde_json::to_string(&data).unwrap()
-                                // data.text
-                            }
-                            MessageJson::EditorContent { ops } => {
-                                let data = json!({
-                                    "source": "editor",
-                                    "payload": ops
-                                    });
-                                serde_json::to_string(&data).unwrap()
-                                // serde_json::to_string(&ops).unwrap()
-                            }
-                        }
+                        // let p: MessageJson = serde_json::from_str(m).unwrap();
+                        // let connection = establish_connection();
+                        // match p {
+                        //     MessageJson::ChatMessage { author, ty, data } => {
+                        //         let _ = create_chat(&connection, &data.text.as_str());
+                        //         let data = json!({
+                        //             "source": "chat",
+                        //             "payload": data.text
+                        //             });
+                        //         serde_json::to_string(&data).unwrap()
+                        //         // data.text
+                        //     }
+                        //     MessageJson::EditorContent { ops } => {
+                        //         let data = json!({
+                        //             "source": "editor",
+                        //             "payload": ops
+                        //             });
+                        //         serde_json::to_string(&data).unwrap()
+                        //         // serde_json::to_string(&ops).unwrap()
+                        //     }
+                        // }
+                        m.to_owned()
                     };
                     // send message to chat server
                     ctx.state().addr.do_send(server::Message {
