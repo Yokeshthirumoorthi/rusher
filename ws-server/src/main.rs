@@ -157,90 +157,12 @@ impl StreamHandler<ws::Message, ws::ProtocolError> for WsChatSession {
             ws::Message::Pong(msg) => self.hb = Instant::now(),
             ws::Message::Text(text) => {
                 let m = text.trim();
-                // we check for /sss type of messages
-                if m.starts_with('/') {
-                    let v: Vec<&str> = m.splitn(2, ' ').collect();
-                    match v[0] {
-                        "/list" => {
-                            // Send ListRooms message to chat server and wait for
-                            // response
-                            println!("List rooms");
-                            ctx.state()
-                                .addr
-                                .send(server::ListRooms)
-                                .into_actor(self)
-                                .then(|res, _, ctx| {
-                                    match res {
-                                        Ok(rooms) => {
-                                            for room in rooms {
-                                                ctx.text(room);
-                                            }
-                                        }
-                                        _ => println!("Something is wrong"),
-                                    }
-                                    fut::ok(())
-                                })
-                                .wait(ctx)
-                            // .wait(ctx) pauses all events in context,
-                            // so actor wont receive any new messages until it get list
-                            // of rooms back
-                        }
-                        "/join" => {
-                            if v.len() == 2 {
-                                self.room = v[1].to_owned();
-                                ctx.state().addr.do_send(server::Join {
-                                    id: self.id,
-                                    name: self.room.clone(),
-                                });
-
-                                ctx.text("joined");
-                            } else {
-                                ctx.text("!!! room name is required");
-                            }
-                        }
-                        "/name" => {
-                            if v.len() == 2 {
-                                self.name = Some(v[1].to_owned());
-                            } else {
-                                ctx.text("!!! name is required");
-                            }
-                        }
-                        _ => ctx.text(format!("!!! unknown command: {:?}", m)),
-                    }
-                } else {
-                    let msg = if let Some(ref name) = self.name {
-                        format!("{}: {}", name, m)
-                    } else {
-                        // let p: MessageJson = serde_json::from_str(m).unwrap();
-                        // let connection = establish_connection();
-                        // match p {
-                        //     MessageJson::ChatMessage { author, ty, data } => {
-                        //         let _ = create_chat(&connection, &data.text.as_str());
-                        //         let data = json!({
-                        //             "source": "chat",
-                        //             "payload": data.text
-                        //             });
-                        //         serde_json::to_string(&data).unwrap()
-                        //         // data.text
-                        //     }
-                        //     MessageJson::EditorContent { ops } => {
-                        //         let data = json!({
-                        //             "source": "editor",
-                        //             "payload": ops
-                        //             });
-                        //         serde_json::to_string(&data).unwrap()
-                        //         // serde_json::to_string(&ops).unwrap()
-                        //     }
-                        // }
-                        m.to_owned()
-                    };
-                    // send message to chat server
-                    ctx.state().addr.do_send(server::Message {
-                        id: self.id,
-                        msg: msg,
-                        room: self.room.clone(),
-                    })
-                }
+                // send message to chat server
+                ctx.state().addr.do_send(server::Message {
+                    id: self.id,
+                    msg: m.to_owned(),
+                    room: self.room.clone(),
+                })
             }
             ws::Message::Binary(bin) => println!("Unexpected binary"),
             ws::Message::Close(_) => {
