@@ -10,7 +10,7 @@
   </clients>
 
   <servers>
-    <server host="167.99.103.140" port="8080" type="tcp" />
+    <server host="142.93.24.50" port="8080" type="tcp" />
   </servers>
 
   <load>
