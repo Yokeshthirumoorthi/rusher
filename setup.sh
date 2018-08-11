@@ -9,7 +9,7 @@ sysctl -w net.core.wmem_max=16384
 wget http://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 sudo dpkg -i erlang-solutions_1.0_all.deb
 yes | sudo apt-get update
-yes | sudo apt-get install elixir esl-erlang build-essential git gnuplot libtemplate-perl autoconf
+yes | sudo apt-get install elixir esl-erlang build-essential git gnuplot libtemplate-perl autoconf htop
 git clone https://github.com/processone/tsung.git
 cd tsung/
 ./configure
