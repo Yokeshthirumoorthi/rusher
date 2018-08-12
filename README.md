@@ -38,7 +38,29 @@ This project uses the following stack,
 4. React JS
 
 #### Build Instructions
+For both server and client machine, use these scripts to increase the kernel polling and default port range numbers
 
+Note: To run several commands as root user use 
+
+```bash
+sudo su -
+```
+
+```bash
+sysctl -w fs.file-max=12000500
+sysctl -w fs.nr_open=20000500
+ulimit -n 4000000
+sysctl -w net.ipv4.tcp_mem='10000000 10000000 10000000'
+sysctl -w net.ipv4.tcp_rmem='1024 4096 16384'
+sysctl -w net.ipv4.tcp_wmem='1024 4096 16384'
+sysctl -w net.core.rmem_max=16384
+sysctl -w net.core.wmem_max=16384
+echo "root soft nofile 4000000" >> /etc/security/limits.conf
+echo "root hard nofile 4000000" >> /etc/security/limits.conf
+sysctl -w net.ipv4.ip_local_port_range="1024 64000"
+```
+
+#### Setting up the server machine
 To install Rust, run the following in your terminal
 
 ```bash
@@ -52,31 +74,50 @@ To install build essentials in ubuntu.
 yes | sudo apt-get update
 yes | sudo apt-get install build-essential git htop sqlite3 libsqlite3-dev
 ```
-1. Setting up the project
+To build the project.
 
-    ```bash
-    git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
-    cd rusher/ws-server
-    cargo install diesel_cli --no-default-features --features sqlite
-    echo "DATABASE_URL=file:test.db" > .env
-    diesel migration run
-    cargo run --bin server --release
-    ```
-2. After setting up the project increase the kernel polling and default port range numbers
+```bash
+git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
+cd rusher/ws-server
+cargo install diesel_cli --no-default-features --features sqlite
+echo "DATABASE_URL=file:test.db" > .env
+diesel migration run
+cargo run --bin server --release
+```
+    
+#### Setting up the client machine
+Install Erlang
 
-    ```bash
-    sysctl -w fs.file-max=12000500
-    sysctl -w fs.nr_open=20000500
-    ulimit -n 4000000
-    sysctl -w net.ipv4.tcp_mem='10000000 10000000 10000000'
-    sysctl -w net.ipv4.tcp_rmem='1024 4096 16384'
-    sysctl -w net.ipv4.tcp_wmem='1024 4096 16384'
-    sysctl -w net.core.rmem_max=16384
-    sysctl -w net.core.wmem_max=16384
-    echo "root soft nofile 4000000" >> /etc/security/limits.conf
-    echo "root hard nofile 4000000" >> /etc/security/limits.conf
-    sysctl -w net.ipv4.ip_local_port_range="1024 64000"
-    ```
+```bash
+wget http://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+sudo dpkg -i erlang-solutions_1.0_all.deb
+```
+To install build essentials in ubuntu.
+
+```bash
+yes | sudo apt-get update
+yes | sudo apt-get install elixir esl-erlang build-essential git gnuplot libtemplate-perl autoconf htop
+```
+Install Tsung
+
+```bash
+git clone https://github.com/processone/tsung.git
+cd tsung/
+./configure
+make
+sudo make install
+cd ..
+```
+
+Running Tsung
+```bash
+git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
+cd rusher
+tsung -k -f tsungconfig.xml start
+```
+
+TODO: provide details for setting up client cluster and editing tsungconfig.xml
+
 #### Authur
 
 1. Yokesh Thirumoorthi - initial author - yokeshthirumoorthi@gmail.com
