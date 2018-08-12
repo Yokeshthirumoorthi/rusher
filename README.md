@@ -46,71 +46,37 @@ curl https://sh.rustup.rs -sSf | sh
 ```
 or follow [this official installation instruction]( https://www.rust-lang.org/en-US/install.html).
 
-To install SQLite, follwing the instruction in this page http://www.sqlitetutorial.net/download-install-sqlite/
-
-You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
-
-If sqlite is not install already use the below command
+To install build essentials in ubuntu.
 
 ```bash
-sudo apt-get install sqlite3 libsqlite3-dev
-```
-
-Need to install build essentials in ubuntu to configure diesel.
-
-```bash
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install build-essential 
+yes | sudo apt-get update
+yes | sudo apt-get install build-essential git htop sqlite3 libsqlite3-dev
 ```
 1. Setting up the project
 
     ```bash
-    git clone https://github.com/Yokeshthirumoorthi/rusher.git
-    cd rusher
-    ```
-
-2. Running server
-
-    From the root folder of the project execute the following commands to run server
-
-    ```bash
-    cd ws-server
-    # init database sqlite
+    git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
+    cd rusher/ws-server
     cargo install diesel_cli --no-default-features --features sqlite
     echo "DATABASE_URL=file:test.db" > .env
     diesel migration run
-    # build the websocket server
-    cargo build
-    # Instead to run in debug mode use 
-    # cargo run --bin server
     cargo run --bin server --release
     ```
-
-3. Running web client
-    
-    From the root folder of the project execute the following commands to run web client
-
-    This runs the app in development mode.
-    Open http://localhost:3000 to view it in the browser.
-
-    The page will automatically reload if you make changes to the js code.
-    You will see the build errors and lint warnings in the console.
+2. After setting up the project increase the kernel polling and default port range numbers
 
     ```bash
-    cd web
-    npm install
-    npm start
+    sysctl -w fs.file-max=12000500
+    sysctl -w fs.nr_open=20000500
+    ulimit -n 4000000
+    sysctl -w net.ipv4.tcp_mem='10000000 10000000 10000000'
+    sysctl -w net.ipv4.tcp_rmem='1024 4096 16384'
+    sysctl -w net.ipv4.tcp_wmem='1024 4096 16384'
+    sysctl -w net.core.rmem_max=16384
+    sysctl -w net.core.wmem_max=16384
+    echo "root soft nofile 4000000" >> /etc/security/limits.conf
+    echo "root hard nofile 4000000" >> /etc/security/limits.conf
+    sysctl -w net.ipv4.ip_local_port_range="1024 64000"
     ```
-
-    To build the app for production use the following command
-
-    ```bash
-    npm run build
-    ```
-    It Builds the app to the build folder and it correctly bundles React in production mode and optimizes the build for the best performance.
-    
-
 #### Authur
 
 1. Yokesh Thirumoorthi - initial author - yokeshthirumoorthi@gmail.com

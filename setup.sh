@@ -16,6 +16,5 @@ cd tsung/
 make
 sudo make install
 cd ..
-git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
 echo "root soft nofile 4000000" >> /etc/security/limits.conf
 echo "root hard nofile 4000000" >> /etc/security/limits.conf
