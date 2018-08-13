@@ -118,6 +118,12 @@ tsung -k -f tsungconfig.xml start
 
 TODO: provide details for setting up client cluster and editing tsungconfig.xml
 
+Useful links:
+
+1. [Set Permanently ulimit -n](https://medium.com/@muhammadtriwibowo/set-permanently-ulimit-n-open-files-in-ubuntu-4d61064429a)
+2. [Benchmarking and Scaling WebSockets: Handling 60000 concurrent connections](http://kemalcr.com/blog/2016/11/13/benchmarking-and-scaling-websockets-handling-60000-concurrent-connections/)
+3. [Tsung User Guide](http://tsung.erlang-projects.org/user_manual/index.html)
+
 #### Authur
 
 1. Yokesh Thirumoorthi - initial author - yokeshthirumoorthi@gmail.com
