@@ -3,39 +3,28 @@ Rusher is a high concurrency (using actor model) websocket server integrated wit
 For now, this websocket provides the following api's
 1. Chat
 2. Colloborative text editing
-3. geofence (typically used for real time location tacking in mobile apps)
 
 An example client, consuming these api's, is available in the web folder of this project.
 It is a React JS web application (in future will add an react-native app too) 
 
-#### Goals
+**NOTE: For benchmarking use the [bench branch](https://github.com/Yokeshthirumoorthi/rusher/tree/bench) for code and instructions**
+
+#### Why Rusher
 The objectives of this project are 
 1. Provide a RUST websocket server with capability to persist data.
-2. Proivde JSON based message format for server/client communication. 
-3. Provide some apis similar to that as in pusher.com
-4. Show that RUST websocket server could handle as much simultaneous connenction as Erlang Phoenix based websocket server can do. 
+2. Provide some apis similar to that as in pusher.com
+3. Show that RUST websocket server could handle as much simultaneous connenction as Erlang Phoenix based websocket server can do. 
  
 Note: Rusher websocket is written using RUST - a fast, safe and efficient  programming language to develope
 highly concurrent and parallel programs. So I believe to acheive something like this blog - [erlang-phoenix 2 million websocket connection.]( http://phoenixframework.org/blog/the-road-to-2-million-websocket-connections).
-
-#### Future Works
-1. Provide more apis such as
-    1. Activity feeds within friend networks
-    2. Realtime bets and
-    3. Realtime trading
-2. An example client consuming these apis using react-native app    
-3. Provide more options for data persistence and benchmark each of them
-    1. Using PostGIS for location based services
-    2. Comparing SQLite / Rust-Redis / Postgres in use for this websocket server
-4. Provide data vizualization for benchmarks and performance metrics like [this](https://www.techempower.com/benchmarks/#section=test&runid=fd07b64e-47ce-411e-8b9b-b13368e988c6)    
 
 #### Software Stack
 
 This project uses the following stack,
 1. Rust programming
-2. Actix-web for actor model based websocket server
-3. Diesel framework SQLite for data persistence
-4. React JS
+    1. Actix-web for actor model based websocket server
+    2. Diesel framework SQLite for data persistence
+2. React JS
 
 #### Build Instructions
 
@@ -46,8 +35,6 @@ curl https://sh.rustup.rs -sSf | sh
 ```
 or follow [this official installation instruction]( https://www.rust-lang.org/en-US/install.html).
 
-To install SQLite, follwing the instruction in this page http://www.sqlitetutorial.net/download-install-sqlite/
-
 You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
 
 If sqlite is not install already use the below command
@@ -56,12 +43,11 @@ If sqlite is not install already use the below command
 sudo apt-get install sqlite3 libsqlite3-dev
 ```
 
-Need to install build essentials in ubuntu to configure diesel.
+Install build essentials in ubuntu to configure diesel.
 
 ```bash
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install build-essential 
+yes | sudo apt-get update
+yes | sudo apt-get install build-essential sqlite3 libsqlite3-dev 
 ```
 1. Setting up the project
 
@@ -87,6 +73,8 @@ sudo apt-get install build-essential
     cargo run --bin server --release
     ```
 
+    The server will start listening at http://127.0.0.1:8080
+
 3. Running web client
     
     From the root folder of the project execute the following commands to run web client
@@ -109,7 +97,18 @@ sudo apt-get install build-essential
     npm run build
     ```
     It Builds the app to the build folder and it correctly bundles React in production mode and optimizes the build for the best performance.
-    
+
+#### Future Works
+1. Provide more apis such as
+    1. Geofence (typically used for real time location tacking in mobile apps)
+    2. Activity feeds within friend networks
+    3. Realtime bets and
+    4. Realtime trading
+2. An example client consuming these apis using react-native app    
+3. Provide more options for data persistence and benchmark each of them
+    1. Using PostGIS for location based services
+    2. Comparing SQLite / Rust-Redis / Postgres in use for this websocket server
+4. Provide data vizualization for benchmarks and performance metrics comparisions like [this](https://www.techempower.com/benchmarks/#section=test&runid=fd07b64e-47ce-411e-8b9b-b13368e988c6)    
 
 #### Authur
 
