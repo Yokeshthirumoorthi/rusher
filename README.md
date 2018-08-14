@@ -7,12 +7,12 @@ For now, this websocket provides the following api's
 An example client, consuming these api's, is available in the web folder of this project.
 It is a React JS web application (in future will add an react-native app too) 
 
-**NOTE: For benchmarking use the [bench branch](https://github.com/Yokeshthirumoorthi/rusher/tree/bench) for code and instructions**
+**NOTE: For benchmarking code and instructions use the [bench branch](https://github.com/Yokeshthirumoorthi/rusher/tree/bench)**
 
 #### Why Rusher
 The objectives of this project are 
 1. Provide a RUST websocket server with capability to persist data.
-2. Provide some apis similar to that as in pusher.com
+2. Provide apis and consume them via web app 
 3. Show that RUST websocket server could handle as much simultaneous connenction as Erlang Phoenix based websocket server can do. 
  
 Note: Rusher websocket is written using RUST - a fast, safe and efficient  programming language to develope
@@ -24,39 +24,37 @@ This project uses the following stack,
 1. Rust programming
     1. Actix-web for actor model based websocket server
     2. Diesel framework SQLite for data persistence
-2. React JS
+2. React JS with
+    1. Quill editor
+    2. React-live-chat
 
 #### Build Instructions
 
-To install Rust, run the following in your terminal
+1. Prerequisites for build
 
-```bash
-curl https://sh.rustup.rs -sSf | sh
-```
-or follow [this official installation instruction]( https://www.rust-lang.org/en-US/install.html).
+    Install Rust by run the following in your terminal
 
-You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
+    ```bash
+    curl https://sh.rustup.rs -sSf | sh
+    ```
+    or follow [this official installation instruction]( https://www.rust-lang.org/en-US/install.html).
 
-If sqlite is not install already use the below command
+    You’ll need to have Node >= 6, to run the web client, on your local development machine. Latest version of nodejs could be downloaded from https://nodejs.org/en/
 
-```bash
-sudo apt-get install sqlite3 libsqlite3-dev
-```
+    Install build essentials in ubuntu to configure diesel.
 
-Install build essentials in ubuntu to configure diesel.
-
-```bash
-yes | sudo apt-get update
-yes | sudo apt-get install build-essential sqlite3 libsqlite3-dev 
-```
-1. Setting up the project
+    ```bash
+    yes | sudo apt-get update
+    yes | sudo apt-get install build-essential sqlite3 libsqlite3-dev 
+    ```
+2. Setup the project
 
     ```bash
     git clone https://github.com/Yokeshthirumoorthi/rusher.git
     cd rusher
     ```
 
-2. Running server
+3. Running server
 
     From the root folder of the project execute the following commands to run server
 
@@ -75,7 +73,7 @@ yes | sudo apt-get install build-essential sqlite3 libsqlite3-dev
 
     The server will start listening at http://127.0.0.1:8080
 
-3. Running web client
+4. Running web client
     
     From the root folder of the project execute the following commands to run web client
 
