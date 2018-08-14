@@ -82,12 +82,9 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Welcome to Rusher</h1>
+          <h5>Fast and Reliable websocket for chat and collaborative text editing</h5>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
         <QuillEditor sendMessage={this.sendWSMessage} data={this.state.editorContent} />
         <ChatWindow sendMessage={this.sendChatMessage} data={this.state.chatMessages} />
       </div>
