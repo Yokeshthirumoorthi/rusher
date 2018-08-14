@@ -24,9 +24,6 @@ This project uses the following stack,
 1. Rust programming
     1. Actix-web for actor model based websocket server
     2. Diesel framework SQLite for data persistence
-2. React JS with
-    1. Quill editor
-    2. React-live-chat
 
 #### Setting up machine
 
@@ -130,8 +127,7 @@ sudo make install
 cd ..
 ```
 
-2. Running server
-Running Tsung
+2. Running Tsung
 ```bash
 git clone -b bench https://github.com/Yokeshthirumoorthi/rusher.git
 cd rusher
@@ -176,17 +172,6 @@ This application uses Open Source components. You can find the source code of th
 Project: https://github.com/actix/examples/tree/master/websocket-chat/
 Copyright (c) 2017 Nikolay Kim (fafhrd91@gmail.com)
 License (MIT) https://github.com/actix/actix-web/blob/master/LICENSE-MIT
-
-Project: https://github.com/dharness/react-chat-window
-Author dylan@kingofthestack.com
-
-Project: https://github.com/zenoamaro/react-quill
-Copyright (c) 2016, zenoamaro zenoamaro@gmail.com
-License (MIT) https://github.com/zenoamaro/react-quill/blob/master/LICENSE
-
-Project: https://github.com/facebook/create-react-app#creating-an-app
-Copyright (c) 2013-present, Facebook, Inc.
-License (MIT) https://github.com/facebook/create-react-app/blob/next/LICENSE
 
 Project: https://github.com/diesel-rs/diesel
 Copyright (c) 2015-2018 Sean Griffin
