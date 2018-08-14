@@ -2,15 +2,16 @@
 <!DOCTYPE tsung SYSTEM "/user/share/tsung/tsung-1.0.dtd">
 <tsung loglevel="debug" version="1.0">
   <clients>
-    <client host="tsungrust1" cpu="4" use_controller_vm="false" maxusers="64000" />
-    <client host="tsungrust2" cpu="6" use_controller_vm="false" maxusers="64000" />
+    <client host="localhost" use_controller_vm="true" />
+    <!-- <client host="tsungrust2" cpu="6" use_controller_vm="false" maxusers="64000" />
     <client host="tsungrust3" cpu="4" use_controller_vm="false" maxusers="64000" />
     <client host="tsungrust4" cpu="6" use_controller_vm="false" maxusers="64000" />
-    <client host="tsungrust5" cpu="6" use_controller_vm="false" maxusers="64000" />
+    <client host="tsungrust5" cpu="6" use_controller_vm="false" maxusers="64000" /> -->
   </clients>
 
   <servers>
-    <server host="142.93.24.50" port="8080" type="tcp" />
+    <!-- provide ip address of host machine -->
+    <server host="" port="8080" type="tcp" />
   </servers>
 
   <load>
